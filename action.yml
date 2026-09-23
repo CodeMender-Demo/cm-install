@@ -1,0 +1,21 @@
+name: Install CodeMender
+description: Downloads the CodeMender CLI and installs it in the runner
+
+runs:
+  using: composite
+  steps:
+    - name: Check for existing installation and install
+      shell: bash
+      run: |
+        CM_VERSION=$(cm --version)
+        if [ -n "$CM_VERSION" ]; then
+            echo "CodeMender not found, installing..."
+            echo "Downloading CodeMender CLI..."
+            curl -sSL "https://storage.googleapis.com/your-bucket/cm-linux-amd64.zip" -o cm.zip
+            unzip -q cm.zip
+            sudo mv cm /usr/local/bin/
+            chmod +x /usr/local/bin/cm
+            rm cm.zip
+        else
+            echo "CodeMender already installed. Version: $CM_VERSION"
+        fi
