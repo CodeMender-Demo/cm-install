@@ -7,8 +7,7 @@ runs:
     - name: Check for existing installation and install
       shell: bash
       run: |
-        CM_VERSION=$(cm --version)
-        if [ -n "$CM_VERSION" ]; then
+        if ! command -v cm &> /dev/null; then
             echo "CodeMender not found, installing..."
             echo "Downloading CodeMender CLI..."
             curl -sSL "https://storage.googleapis.com/your-bucket/cm-linux-amd64.zip" -o cm.zip
@@ -17,5 +16,7 @@ runs:
             chmod +x /usr/local/bin/cm
             rm cm.zip
         else
+            # Command exists, now it's safe to check the version
+            CM_VERSION=$(cm --version)
             echo "CodeMender already installed. Version: $CM_VERSION"
         fi
