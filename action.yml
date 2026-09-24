@@ -1,9 +1,27 @@
 name: Install CodeMender
 description: Downloads the CodeMender CLI and installs it in the runner
 
+inputs:
+  workload_identity_provider:
+    description: The full identifier of the GCP Workload Identity Provider
+    required: true
+  service_account:
+    description: The GCP service account email to impersonate
+    required: true
+
 runs:
   using: composite
   steps:
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: "${{ inputs.workload_identity_provider }}"
+        service_account: "${{ inputs.service_account }}"
+
+    # Set up the gcloud CLI
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
     - name: Check for existing installation and install
       shell: bash
       run: |
