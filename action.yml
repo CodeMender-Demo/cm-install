@@ -10,11 +10,12 @@ runs:
         if ! command -v cm &> /dev/null; then
             echo "CodeMender not found, installing..."
             echo "Downloading CodeMender CLI..."
-            curl -L -o cm-darwin-arm64.zip "https://artifactregistry.googleapis.com/download/v1/projects/cmoc-prod/locations/us/repositories/codemender-cli-production/files/cm%3Astable%3Acm-darwin-arm64.zip:download?alt=media"
-            unzip cm-darwin-arm64.zip
+            curl -L -o cm-linux-amd64.zip "https://artifactregistry.googleapis.com/download/v1/projects/cmoc-prod/locations/us/repositories/codemender-cli-production/files/cm%3Astable%3Acm-linux-amd64.zip:download?alt=media"
+            unzip cm-linux-amd64.zip
             chmod +x cm
             mv cm /usr/local/bin/cm
-            rm cm-darwin-arm64.zip
+            cm init
+            rm cm-linux-amd64.zip
         else
             # Command exists, now it's safe to check the version
             CM_VERSION=$(cm --version)
